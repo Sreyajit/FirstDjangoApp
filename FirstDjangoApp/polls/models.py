@@ -7,4 +7,3 @@ class Choice(models.Model):
     choice_text = models.CharField(max_length=240)
     votes= models.IntegerField(default=0)
     
-# Create your models here.
