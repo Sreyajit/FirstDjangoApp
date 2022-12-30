@@ -1,6 +1,6 @@
-from importlib.abc import Loader
+from ast import Try
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.generic import View, DetailView
 from django.template import loader
 from django.shortcuts import render
@@ -14,7 +14,11 @@ class Homepage(View):
         return render(request, "polls/index.html", context=self.context)
 class Detail(DetailView):
     def get(self, request, question_id):
-        return HttpResponse("You are looking at question %s." % question_id)
+        try:
+            question=Question.objects.get(pk=question_id)
+        except Question.DoesNotExist:
+            raise Http404("Question not found")
+        return render(request,"polls/detail.html",{'question':question})
 class Results(View):
     def get(self, request, question_id):
         response = "You're looking at the results of question %s."
